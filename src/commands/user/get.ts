@@ -1,20 +1,26 @@
 import chalk from "chalk";
 import { command } from "../../structs/command.js";
-import { formatPOJO } from "../../util/format-pojo.js";
+import { formatPOJO } from "../../helpers/theme/format-pojo.js";
+import { fmt } from "../../helpers/theme/fmt.js";
 
 export default command<{
     username: string;
 }>(
     {
         name: "get <username>",
-        description: "Displays information about a GitHub user.",
+        description: "Displays information about a GitHub user",
+        args: [
+            {
+                name: "username",
+                description: "The username of the GitHub user",
+                demandOption: true,
+            },
+        ],
     },
     async ({ argv, ghClient }) => {
         if (ghClient === undefined) {
             console.error(
-                chalk.red(
-                    "Octoshark is not connected to your GitHub account. Run 'oshark connect' to remedy this."
-                )
+                fmt`E:${"Octoshark is not connected to your GitHub account. Run 'oshark connect' to remedy this."}`
             );
 
             return;
@@ -22,7 +28,7 @@ export default command<{
 
         if (!argv.username) {
             console.warn(argv);
-            console.error(chalk.red("<username> argument is required."));
+            console.error(fmt`E:${"<username> argument is required."}`);
 
             process.exit(1);
         }

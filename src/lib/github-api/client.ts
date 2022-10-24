@@ -14,6 +14,36 @@ export class GitHubClient {
         this.token = token;
     }
 
+    static async flattenPagination<
+        D extends {
+            per_page?: number;
+            page?: number;
+        },
+        R extends unknown[]
+    >(apiMethod: (data?: D) => Promise<R>, data: D, perPage = 30): Promise<R> {
+        const result: R = [] as any;
+
+        let currentPage = 1;
+
+        while (true) {
+            const response = await apiMethod({
+                ...data,
+                per_page: perPage,
+                page: currentPage,
+            });
+
+            if (response.length === 0) {
+                break;
+            }
+
+            result.push(...response);
+
+            currentPage++;
+        }
+
+        return result;
+    }
+
     protected request<R extends Record<string, unknown>>(
         method: RequestMethod,
         endpoint: string | WithParamsFunction,
@@ -104,8 +134,10 @@ export class GitHubClient {
             authenticated: {
                 get: this.makeEndpointMethod("GET /user"),
                 repos: this.makeEndpointMethod("GET /user/repos"),
+                orgs: this.makeEndpointMethod("GET /user/orgs"),
             },
             get: this.makeEndpointMethod("GET /users/{username}"),
+            orgs: this.makeEndpointMethod("GET /user/orgs"),
         };
     }
 

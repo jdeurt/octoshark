@@ -4,6 +4,7 @@ import { UnwrappedPromise } from "unwrapped-promise";
 interface TaskIndicatorOptions {
     text: string;
     prefixText?: string;
+    doneMessage?: string;
 }
 
 export class TaskIndicator<T> {
@@ -32,8 +33,8 @@ export class TaskIndicator<T> {
     }
 
     private done(result: T, info?: string) {
-        if (info) {
-            this.spinner.succeed(info);
+        if (info ?? this.options.doneMessage) {
+            this.spinner.succeed(info ?? this.options.doneMessage);
         } else {
             this.spinner.stop();
         }
@@ -57,5 +58,17 @@ export class TaskIndicator<T> {
         options: TaskIndicatorOptions
     ) {
         return new TaskIndicator<T>(task, options).promise;
+    }
+
+    static fromApiMethod<D, R>(
+        apiMethod: (data?: D) => Promise<R>,
+        data: D,
+        options: TaskIndicatorOptions
+    ) {
+        return TaskIndicator.promise<R>(async (done, interrupt) => {
+            apiMethod(data)
+                .then(done)
+                .catch((err) => interrupt(err.message));
+        }, options);
     }
 }

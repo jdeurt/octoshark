@@ -1,5 +1,5 @@
-import chalk from "chalk";
 import terminalLink from "terminal-link";
+import { fmt } from "../../helpers/theme/fmt.js";
 import { command } from "../../structs/command.js";
 import { select, confirm } from "../../util/prompt.js";
 import { TaskIndicator } from "../../util/task-indicator.js";
@@ -8,10 +8,12 @@ export default command<{ visibility: "all" | "public" | "private" }>(
     {
         name: "comb [visibility]",
         description:
-            "Loops through the authenticated user's repositories and allows you to mark them for deletion/privatization.",
+            "Loops through your repositories and allows you to mark them for deletion/privatization",
         args: [
             {
                 name: "visibility",
+                description:
+                    "The visibility of the repositories that should be combed through",
                 choices: ["all", "public", "private"],
                 default: "all",
             },
@@ -20,9 +22,7 @@ export default command<{ visibility: "all" | "public" | "private" }>(
     async ({ argv, ghClient }) => {
         if (ghClient === undefined) {
             console.error(
-                chalk.red(
-                    "Octoshark is not connected to your GitHub account. Run 'oshark connect' to remedy this."
-                )
+                fmt`E:${"Octoshark is not connected to your GitHub account. Run 'oshark connect' to remedy this."}`
             );
 
             process.exit(1);
@@ -49,39 +49,21 @@ export default command<{ visibility: "all" | "public" | "private" }>(
             console.clear();
 
             console.log(
-                `${chalk.bold.blueBright(
-                    terminalLink(currentRepo.name, currentRepo.html_url)
-                )}${currentRepo.fork ? ` (fork)` : ""}`
+                fmt`f:${[currentRepo.name, currentRepo.html_url]}${
+                    currentRepo.fork ? ` (fork)` : ""
+                }`
             );
-            console.log(
-                `${chalk.bold.yellow("☆")} ${currentRepo.stargazers_count}`
-            );
+            console.log(`☆ ${currentRepo.stargazers_count}`);
             console.log(currentRepo.description ?? "No description");
             console.log();
 
-            console.log(
-                `Visibility: ${chalk.greenBright(currentRepo.visibility)}`
-            );
-            console.log(
-                `Watchers: ${chalk.greenBright(currentRepo.watchers_count)}`
-            );
-            console.log(
-                `Open issues: ${chalk.greenBright(
-                    currentRepo.open_issues_count
-                )}`
-            );
-            console.log(`Forks: ${chalk.greenBright(currentRepo.forks_count)}`);
-            console.log(
-                `Created: ${chalk.greenBright(currentRepo.created_at)}`
-            );
-            console.log(
-                `Last updated: ${chalk.greenBright(currentRepo.updated_at)}`
-            );
-            console.log(
-                `Is template?: ${chalk.greenBright(
-                    currentRepo.is_template ?? false
-                )}`
-            );
+            console.log(fmt`Visibility: v:${currentRepo.visibility}`);
+            console.log(`Watchers: v:${currentRepo.watchers_count}`);
+            console.log(`Open issues: v:${currentRepo.open_issues_count}`);
+            console.log(`Forks: v:${currentRepo.forks_count}`);
+            console.log(`Created: v:${currentRepo.created_at}`);
+            console.log(`Last updated: v:${currentRepo.updated_at}`);
+            console.log(`Is template?: v:${currentRepo.is_template ?? false}`);
             console.log();
 
             const action: string = await select("Choose an action", [
@@ -96,7 +78,7 @@ export default command<{ visibility: "all" | "public" | "private" }>(
                     name: "make_private",
                     disabled: currentRepo.fork || currentRepo.private,
                 },
-                { message: chalk.red("Delete"), name: "delete" },
+                { message: fmt`d:${"Delete"}`, name: "delete" },
                 { name: "sep", role: "separator" },
                 { message: "Finish", name: "finish" },
             ]);
@@ -135,23 +117,21 @@ export default command<{ visibility: "all" | "public" | "private" }>(
                 `The following repositories would be made private:\n\t${idsToMakePrivate
                     .map(
                         (id) =>
-                            `${chalk.blueBright(
-                                terminalLink(idMap[id].name, idMap[id].html_url)
-                            )}${idMap[id].fork ? ` (fork)` : ""}`
+                            fmt`f:${[idMap[id].name, idMap[id].html_url]}${
+                                idMap[id].fork ? ` (fork)` : ""
+                            }`
                     )
                     .join("\n\t")}`
             );
 
         idsToDelete.length > 0 &&
             console.log(
-                `The following repositories would be ${chalk.bold.red(
-                    "PERMANENTLY DELETED"
-                )}:\n\t${idsToDelete
+                fmt`The following repositories would be d:${"PERMANENTLY DELETED"}:\n\t${idsToDelete
                     .map(
                         (id) =>
-                            `${chalk.blueBright(
-                                terminalLink(idMap[id].name, idMap[id].html_url)
-                            )}${idMap[id].fork ? ` (fork)` : ""}`
+                            fmt`blue:${[idMap[id].name, idMap[id].html_url]}${
+                                idMap[id].fork ? ` (fork)` : ""
+                            }`
                     )
                     .join("\n\t")}`
             );
@@ -181,17 +161,10 @@ export default command<{ visibility: "all" | "public" | "private" }>(
                         return;
                     }
 
-                    done(
-                        undefined,
-                        `${chalk.blueBright(repo.name)} -> ${chalk.greenBright(
-                            "private"
-                        )}`
-                    );
+                    done(undefined, fmt`blue:${repo.name} -> v:${"private"}`);
                 },
                 {
-                    text: `${chalk.blueBright(
-                        repo.name
-                    )} -> ${chalk.greenBright("private")}`,
+                    text: fmt`blue:${repo.name} -> v:${"private"}`,
                 }
             );
         }
@@ -213,17 +186,10 @@ export default command<{ visibility: "all" | "public" | "private" }>(
                         return;
                     }
 
-                    done(
-                        undefined,
-                        `${chalk.blueBright(repo.name)} -> ${chalk.bold.red(
-                            "DELETE"
-                        )}`
-                    );
+                    done(undefined, fmt`blue:${repo.name} -> d:${"DELETE"}`);
                 },
                 {
-                    text: `${chalk.blueBright(repo.name)} -> ${chalk.bold.red(
-                        "DELETE"
-                    )}`,
+                    text: fmt`blue:${repo.name} -> d:${"DELETE"}`,
                 }
             );
         }

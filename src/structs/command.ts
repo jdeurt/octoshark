@@ -13,7 +13,7 @@ export interface Command<
     aliases?: string[];
 
     args?: (PositionalOptions & { name: string })[];
-    flags?: Flag[];
+    flags?: Flag<unknown>[];
 
     run(argv: ArgumentsCamelCase<T>): Promise<void>;
 }

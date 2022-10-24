@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { table } from "table";
 import constants from "../config/github.js";
 import {
@@ -9,6 +8,7 @@ import { command } from "../structs/command.js";
 import { GitHubClient } from "../lib/github-api/client.js";
 import { anyKey } from "../util/any-key.js";
 import { TaskIndicator } from "../util/task-indicator.js";
+import { fmt } from "../helpers/theme/fmt.js";
 
 export default command(
     {
@@ -40,7 +40,7 @@ export default command(
         );
 
         console.log("Type the code above into the following page:");
-        console.log(chalk.blueBright(verification.verification_uri));
+        console.log(fmt`l:${verification.verification_uri}`);
 
         console.log("\nPress any key to continue...");
         await anyKey();

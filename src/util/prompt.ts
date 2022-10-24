@@ -30,10 +30,12 @@ export const autoComplete = (
         message,
         choices,
         maxChoices: limit,
-    }) as Promise<string>;
+    }).then(extractResultValue) as Promise<string>;
 
 export const confirm = (message: string) =>
-    prompt({ type: "confirm", name: "0", message }) as Promise<boolean>;
+    prompt({ type: "confirm", name: "0", message }).then(
+        extractResultValue
+    ) as Promise<boolean>;
 
 export const input = (message: string, placeholder?: string) =>
     prompt({
@@ -41,7 +43,7 @@ export const input = (message: string, placeholder?: string) =>
         name: "0",
         message,
         initial: placeholder,
-    }) as Promise<string>;
+    }).then(extractResultValue) as Promise<string>;
 
 export const multiSelect = (
     message: string,

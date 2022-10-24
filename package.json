@@ -53,13 +53,16 @@
         "@octokit/types": "^8.0.0",
         "chalk": "^4.1.2",
         "enquirer": "^2.3.6",
+        "execa": "^6.1.0",
         "ini": "^3.0.0",
         "listr2": "^5.0.5",
         "ora": "^6.1.2",
+        "sgex": "^2.0.0",
         "table": "^6.8.0",
         "terminal-link": "^3.0.0",
         "unwrapped-promise": "^0.6.2",
-        "yargs": "^17.5.1"
+        "yargs": "^17.5.1",
+        "yup": "^0.32.11"
     },
     "type": "module",
     "bin": {

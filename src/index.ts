@@ -31,7 +31,13 @@ function initCommandLike(commandLike: CommandLike) {
                 );
 
                 commandLike.flags?.forEach((flag) =>
-                    yargs.option(flag.long, flag)
+                    yargs.option(flag.long, {
+                        description: flag.description,
+                        alias: flag.short,
+                        demandOption: flag.required,
+                        default: flag.default,
+                        type: flag.type,
+                    })
                 );
             }
 
