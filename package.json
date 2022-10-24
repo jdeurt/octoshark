@@ -1,7 +1,7 @@
 {
     "version": "0.0.1",
     "name": "oshark",
-    "repository": "jdeurt/oshark",
+    "repository": "jdeurt/octoshark",
     "description": "Advanced GitHub CLI utilities",
     "main": "dist/index.js",
     "types": "types/index.d.ts",
