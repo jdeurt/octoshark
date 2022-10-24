@@ -73,7 +73,9 @@ export class GitHubClient {
                     const errData = await response.json().catch(() => ({}));
 
                     throw new Error(
-                        `${response.status} ${errData.message}\n${errData}`
+                        `${response.status} ${
+                            errData.message
+                        }\n${JSON.stringify(errData)}`
                     );
                 }
 
