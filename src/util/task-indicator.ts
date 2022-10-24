@@ -1,6 +1,12 @@
 import ora, { Ora } from "ora";
 import { UnwrappedPromise } from "unwrapped-promise";
 
+type TaskCallback<T> = (
+    done: (result: T, info?: string) => void,
+    interrupt: (reason: string, type?: "warning" | "error") => null,
+    displayed: Ora
+) => void;
+
 interface TaskIndicatorOptions {
     text: string;
     prefixText?: string;
@@ -13,13 +19,7 @@ export class TaskIndicator<T> {
 
     promise: UnwrappedPromise<T>;
 
-    constructor(
-        task: (
-            done: (result: T, info?: string) => void,
-            interrupt: (reason: string, type?: "warning" | "error") => null
-        ) => void,
-        options: TaskIndicatorOptions
-    ) {
+    constructor(task: TaskCallback<T>, options: TaskIndicatorOptions) {
         this.options = options;
 
         this.spinner = ora({
@@ -29,7 +29,7 @@ export class TaskIndicator<T> {
 
         this.promise = new UnwrappedPromise<T>();
 
-        task(this.done.bind(this), this.interrupt.bind(this));
+        task(this.done.bind(this), this.interrupt.bind(this), this.spinner);
     }
 
     private done(result: T, info?: string) {
@@ -50,13 +50,7 @@ export class TaskIndicator<T> {
         return null;
     }
 
-    static promise<T>(
-        task: (
-            done: (result: T, info?: string) => void,
-            interrupt: (reason: string, type?: "warning" | "error") => null
-        ) => void,
-        options: TaskIndicatorOptions
-    ) {
+    static promise<T>(task: TaskCallback<T>, options: TaskIndicatorOptions) {
         return new TaskIndicator<T>(task, options).promise;
     }
 

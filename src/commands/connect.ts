@@ -5,7 +5,7 @@ import {
     GithubDeviceAuthFlow,
 } from "../helpers/github-device-auth-flow.js";
 import { command } from "../structs/command.js";
-import { GitHubClient } from "../lib/github-api/client.js";
+import { GitHubClient } from "../structs/github-client.js";
 import { anyKey } from "../util/any-key.js";
 import { TaskIndicator } from "../util/task-indicator.js";
 import { fmt } from "../helpers/theme/fmt.js";

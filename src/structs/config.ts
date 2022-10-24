@@ -7,8 +7,8 @@ import {
 import { readFileSync, mkdirSync, existsSync, writeFileSync } from "node:fs";
 import { encode, decode } from "ini";
 
-export class OctosharkConfig<T extends Record<string, any>> {
-    private static _instance?: OctosharkConfig<any>;
+export class Config<T extends Record<string, any>> {
+    private static _instance?: Config<any>;
 
     private parsedConfigPath: ParsedPath;
     strConfigPath: string;
@@ -33,13 +33,13 @@ export class OctosharkConfig<T extends Record<string, any>> {
         this.document = decode(readFileSync(this.strConfigPath, "utf8")) as T;
     }
 
-    static instance<T extends Record<string, any>>(): OctosharkConfig<T> {
-        OctosharkConfig._instance ??= new OctosharkConfig<T>();
+    static instance<T extends Record<string, any>>(): Config<T> {
+        Config._instance ??= new Config<T>();
 
-        return OctosharkConfig._instance;
+        return Config._instance;
     }
 
-    refresh(): OctosharkConfig<T> {
+    refresh(): Config<T> {
         this.document = decode(readFileSync(this.strConfigPath, "utf8")) as T;
 
         return this;

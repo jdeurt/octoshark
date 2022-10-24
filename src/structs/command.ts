@@ -1,9 +1,9 @@
 import type { ArgumentsCamelCase, PositionalOptions } from "yargs";
-import { OctosharkConfig } from "./config.js";
-import { GitHubClient } from "../lib/github-api/client.js";
+import { Config } from "./config.js";
+import { GitHubClient } from "./github-client.js";
 import type { Flag } from "../types/flag";
-import type { AuthorizationRequestResponseData } from "../helpers/github-device-auth-flow";
 import { fmt } from "../helpers/theme/fmt.js";
+import type { OctosharkConfigData } from "../types/octoshark-config-data";
 
 export interface Command<
     T extends Record<string, unknown> = Record<string, unknown>
@@ -23,10 +23,7 @@ export function command<A extends Record<string, unknown>>(
     meta: Omit<Command<A>, "run"> & { requiresAuthentication?: false },
     run: (params: {
         argv: ArgumentsCamelCase<A>;
-        config: OctosharkConfig<{
-            auth?: AuthorizationRequestResponseData;
-            protocol?: "ssh" | "https";
-        }>;
+        config: Config<OctosharkConfigData>;
         ghClient?: GitHubClient;
     }) => Promise<void>
 ): Command<A>;
@@ -34,10 +31,7 @@ export function command<A extends Record<string, unknown>>(
     meta: Omit<Command<A>, "run"> & { requiresAuthentication: true },
     run: (params: {
         argv: ArgumentsCamelCase<A>;
-        config: OctosharkConfig<{
-            auth?: AuthorizationRequestResponseData;
-            protocol?: "ssh" | "https";
-        }>;
+        config: Config<OctosharkConfigData>;
         ghClient: GitHubClient;
     }) => Promise<void>
 ): Command<A>;
@@ -45,10 +39,7 @@ export function command<A extends Record<string, unknown>>(
     meta: Omit<Command<A>, "run"> & { requiresAuthentication?: boolean },
     run: any // Don't wanna deal with typing this
 ): Command<A> {
-    const config = OctosharkConfig.instance<{
-        auth?: AuthorizationRequestResponseData;
-        protocol?: "ssh" | "https";
-    }>();
+    const config = Config.instance<OctosharkConfigData>();
 
     const ghClient =
         config.document.auth?.access_token !== undefined

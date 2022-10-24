@@ -9,6 +9,7 @@ export default command<{
     {
         name: "get <username>",
         description: "Displays information about a GitHub user",
+        aliases: ["g"],
         args: [
             {
                 name: "username",

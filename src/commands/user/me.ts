@@ -7,6 +7,7 @@ export default command(
     {
         name: "me",
         description: "Displays information about your GitHub profile",
+        aliases: ["m"],
         requiresAuthentication: true,
     },
     async ({ ghClient }) => {

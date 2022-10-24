@@ -5,7 +5,7 @@ export const styles = {
     warning: chalk.yellow,
     success: chalk.green,
     danger: chalk.red,
-    dataKey: chalk.whiteBright,
+    dataKey: chalk.bold.whiteBright,
     dataValue: chalk.greenBright,
     focus: chalk.bold.blueBright,
     link: chalk.underline.blueBright,

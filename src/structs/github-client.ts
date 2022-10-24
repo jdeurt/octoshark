@@ -1,9 +1,9 @@
 import type { Endpoints } from "@octokit/types";
 
-import { withParams } from "../../helpers/with-params.js";
-import type { WithParamsFunction } from "../../helpers/with-params";
-import type { RequestData } from "../../types/request-data";
-import type { RequestMethod } from "../../types/request-method";
+import { withParams } from "../helpers/with-params.js";
+import type { WithParamsFunction } from "../helpers/with-params";
+import type { RequestData } from "../types/request-data";
+import type { RequestMethod } from "../types/request-method";
 
 export class GitHubClient {
     static baseApiUrl = "https://api.github.com";
@@ -135,6 +135,25 @@ export class GitHubClient {
         return endpointMethod;
     }
 
+    get status() {
+        return {
+            rateLimit: this.makeEndpointMethod("GET /rate_limit"),
+        };
+    }
+
+    get templates() {
+        return {
+            gitignore: {
+                list: this.makeEndpointMethod("GET /gitignore/templates"),
+                get: this.makeEndpointMethod("GET /gitignore/templates/{name}"),
+            },
+            licenses: {
+                list: this.makeEndpointMethod("GET /licenses"),
+                get: this.makeEndpointMethod("GET /licenses/{license}"),
+            },
+        };
+    }
+
     get user() {
         return {
             authenticated: {
@@ -159,6 +178,30 @@ export class GitHubClient {
             ),
             update: this.makeEndpointMethod("PATCH /repos/{owner}/{repo}"),
             delete: this.makeEndpointMethod("DELETE /repos/{owner}/{repo}"),
+            getPublicKey: this.makeEndpointMethod(
+                "GET /repos/{owner}/{repo}/actions/secrets/public-key"
+            ),
+            getEnvironment: this.makeEndpointMethod(
+                "GET /repos/{owner}/{repo}/environments/{environment_name}"
+            ),
+            updateEnvironment: this.makeEndpointMethod(
+                "PUT /repos/{owner}/{repo}/environments/{environment_name}"
+            ),
+            deleteEnvironment: this.makeEndpointMethod(
+                "DELETE /repos/{owner}/{repo}/environments/{environment_name}"
+            ),
+            getEnvironmentPublicKey: this.makeEndpointMethod(
+                "GET /repositories/{repository_id}/environments/{environment_name}/secrets/public-key"
+            ),
+            getEnvironmentSecret: this.makeEndpointMethod(
+                "GET /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"
+            ),
+            updateEnvironmentSecret: this.makeEndpointMethod(
+                "PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"
+            ),
+            deleteEnvironmentSecret: this.makeEndpointMethod(
+                "DELETE /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"
+            ),
         };
     }
 }

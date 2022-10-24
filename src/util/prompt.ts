@@ -32,8 +32,8 @@ export const autoComplete = (
         maxChoices: limit,
     }).then(extractResultValue) as Promise<string>;
 
-export const confirm = (message: string) =>
-    prompt({ type: "confirm", name: "0", message }).then(
+export const confirm = (message: string, initial = false) =>
+    prompt({ type: "confirm", name: "0", message, initial }).then(
         extractResultValue
     ) as Promise<boolean>;
 

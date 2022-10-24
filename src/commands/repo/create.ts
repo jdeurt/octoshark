@@ -1,11 +1,12 @@
 import { execaCommand } from "execa";
 import * as yup from "yup";
 import { fmt } from "../../helpers/theme/fmt.js";
-import { GitHubClient } from "../../lib/github-api/client.js";
+import { GitHubClient } from "../../structs/github-client.js";
 import { command } from "../../structs/command.js";
 import { confirm, input, select } from "../../util/prompt.js";
 import { repoUrl } from "../../util/repo-url.js";
 import { TaskIndicator } from "../../util/task-indicator.js";
+import { removeWhitespace } from "../../util/remove-whitespace.js";
 
 export default command<{
     name?: string;
@@ -18,6 +19,7 @@ export default command<{
     {
         name: "create",
         description: "Creates a new repository",
+        aliases: ["c"],
         flags: [
             {
                 long: "name",
@@ -69,7 +71,7 @@ export default command<{
 
         if (!argv.name) {
             argv.name = await input("Repository name (required)").then(
-                (value) => value.replace(/\s+/g, "")
+                removeWhitespace
             );
         }
 
@@ -113,7 +115,7 @@ export default command<{
                     templateOptions.map((templateRepo) => ({
                         name: `${templateRepo.owner.login}/${templateRepo.name}`,
                     }))
-                ).then((value) => value.replace(/\s+/g, ""));
+                ).then(removeWhitespace);
             }
         }
 
@@ -149,7 +151,7 @@ export default command<{
                     orgOptions.map((org) => ({
                         name: org.login,
                     }))
-                ).then((value) => value.replace(/\s+/g, ""));
+                ).then(removeWhitespace);
             }
         }
 

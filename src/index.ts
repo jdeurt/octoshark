@@ -19,10 +19,6 @@ function initCommandLike(commandLike: CommandLike) {
         commandLike.name,
         commandLike.description,
         (yargs) => {
-            commandLike.aliases?.forEach((alias) =>
-                yargs.alias(alias, commandLike.name)
-            );
-
             if (isCommandGroup(commandLike)) {
                 commandLike.children.forEach(initCommandLike);
             } else {
@@ -44,6 +40,15 @@ function initCommandLike(commandLike: CommandLike) {
             return yargs;
         },
         isCommandGroup(commandLike) ? undefined : commandLike.run
+    );
+
+    commandLike.aliases?.forEach((alias) =>
+        initCommandLike({
+            ...commandLike,
+            name: alias,
+            aliases: undefined,
+            description: `Alias for '${commandLike.name}'`,
+        })
     );
 }
 

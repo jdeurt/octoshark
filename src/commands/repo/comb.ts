@@ -1,4 +1,3 @@
-import terminalLink from "terminal-link";
 import { fmt } from "../../helpers/theme/fmt.js";
 import { command } from "../../structs/command.js";
 import { select, confirm } from "../../util/prompt.js";
