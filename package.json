@@ -1,8 +1,8 @@
 {
     "version": "0.0.0",
-    "name": "octoshark",
-    "repository": "jdeurt/octoshark",
-    "description": "GitHub command line utility",
+    "name": "oshark",
+    "repository": "jdeurt/oshark",
+    "description": "Advanced GitHub CLI utilities",
     "main": "dist/index.js",
     "types": "types/index.d.ts",
     "license": "MIT",
