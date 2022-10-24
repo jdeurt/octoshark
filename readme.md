@@ -6,6 +6,20 @@
 
 > Advanced GitHub CLI utilities
 
+## Installation
+
+### NPM
+
+```bash
+npm i oshark -g
+```
+
+### Yarn
+
+```bash
+yarn global add oshark
+```
+
 ## License
 
 MIT © [Juan de Urtubey](https://jdeurt.xyz)
