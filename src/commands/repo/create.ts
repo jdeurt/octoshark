@@ -4,6 +4,7 @@ import { fmt } from "../../helpers/theme/fmt.js";
 import { GitHubClient } from "../../lib/github-api/client.js";
 import { command } from "../../structs/command.js";
 import { confirm, input, select } from "../../util/prompt.js";
+import { repoUrl } from "../../util/repo-url.js";
 import { TaskIndicator } from "../../util/task-indicator.js";
 
 export default command<{
@@ -11,7 +12,7 @@ export default command<{
     description?: string;
     private?: boolean;
     template?: string;
-    org?: string;
+    organization?: string;
     clone?: boolean;
 }>(
     {
@@ -25,7 +26,7 @@ export default command<{
                 type: "string",
             },
             {
-                long: "desc",
+                long: "description",
                 short: "d",
                 description: "The repository description",
                 type: "string",
@@ -44,7 +45,7 @@ export default command<{
                 type: "string",
             },
             {
-                long: "org",
+                long: "organization",
                 short: "o",
                 description: "The organization to create the repository under",
                 type: "string",
@@ -53,20 +54,13 @@ export default command<{
                 long: "clone",
                 short: "c",
                 description:
-                    "Whether to clone the repository into the current directory after it is created",
+                    "Clones the repository into the current directory after it is created",
                 type: "boolean",
             },
         ],
+        requiresAuthentication: true,
     },
-    async ({ argv, ghClient }) => {
-        if (ghClient === undefined) {
-            console.error(
-                fmt`E:${"Octoshark is not connected to your GitHub account. Run 'oshark connect' to remedy this."}`
-            );
-
-            process.exit(1);
-        }
-
+    async ({ argv, config, ghClient }) => {
         const user = await TaskIndicator.fromApiMethod(
             ghClient.user.authenticated.get,
             {},
@@ -123,7 +117,7 @@ export default command<{
             }
         }
 
-        if (argv.org === undefined) {
+        if (argv.organization === undefined) {
             const wantsOrg = await confirm("Create under organization?");
 
             if (wantsOrg) {
@@ -150,7 +144,7 @@ export default command<{
                     { text: "Fetching organizations..." }
                 );
 
-                argv.org = await select(
+                argv.organization = await select(
                     "Organization",
                     orgOptions.map((org) => ({
                         name: org.login,
@@ -193,25 +187,25 @@ export default command<{
                     name: argv.name!,
                     description: argv.description || undefined,
                     private: argv.private,
-                    owner: argv.org || undefined,
+                    owner: argv.organization || undefined,
                 },
                 {
                     text: `Creating ${user.login}/${argv.name}...`,
                     doneMessage: `Created ${user.login}/${argv.name} successfully`,
                 }
             );
-        } else if (argv.org) {
+        } else if (argv.organization) {
             createdRepo = await TaskIndicator.fromApiMethod(
                 ghClient.repo.createInOrganization,
                 {
-                    org: argv.org,
+                    org: argv.organization,
                     name: argv.name!,
                     description: argv.description || undefined,
                     private: argv.private,
                 },
                 {
-                    text: `Creating ${argv.org}/${argv.name}...`,
-                    doneMessage: `Created ${argv.org}/${argv.name} successfully`,
+                    text: `Creating ${argv.organization}/${argv.name}...`,
+                    doneMessage: `Created ${argv.organization}/${argv.name} successfully`,
                 }
             );
         } else {
@@ -233,21 +227,25 @@ export default command<{
             await TaskIndicator.promise(
                 async (done, interrupt) => {
                     execaCommand(
-                        `git clone git@github.com:${createdRepo.owner}/${createdRepo.name}.git`
+                        repoUrl(
+                            createdRepo.owner.login,
+                            createdRepo.name,
+                            config.document.protocol
+                        )
                     )
                         .then(() => done(undefined))
                         .catch((err) => interrupt(err.message));
                 },
                 {
-                    text: `Cloning ${createdRepo.owner}/${createdRepo.name}...`,
-                    doneMessage: `Cloned ${createdRepo.owner}/${
+                    text: `Cloning ${createdRepo.owner.login}/${createdRepo.name}...`,
+                    doneMessage: `Cloned ${createdRepo.owner.login}/${
                         createdRepo.name
                     } into ${process.cwd()} successfully`,
                 }
             );
         } else {
             console.log(
-                `Clone this repository by running:\n\n\tgit clone git@github.com:${createdRepo.owner}/${createdRepo.name}.git\n`
+                `Clone this repository by running:\n\n\tgit clone git@github.com:${createdRepo.owner.login}/${createdRepo.name}.git\n`
             );
         }
     }

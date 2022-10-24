@@ -18,16 +18,9 @@ export default command<{ visibility: "all" | "public" | "private" }>(
                 default: "all",
             },
         ],
+        requiresAuthentication: true,
     },
     async ({ argv, ghClient }) => {
-        if (ghClient === undefined) {
-            console.error(
-                fmt`E:${"Octoshark is not connected to your GitHub account. Run 'oshark connect' to remedy this."}`
-            );
-
-            process.exit(1);
-        }
-
         const getRepo = (page: number) =>
             ghClient.user.authenticated
                 .repos({

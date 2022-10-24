@@ -13,7 +13,7 @@ import { fmt } from "../helpers/theme/fmt.js";
 export default command(
     {
         name: "connect",
-        description: "Connects Octoshark to your GitHub account.",
+        description: "Connects Octoshark to your GitHub account",
     },
     async ({ config }) => {
         const flow = new GithubDeviceAuthFlow(

@@ -68,14 +68,18 @@ export class GitHubClient {
                 body: data.body && JSON.stringify(data.body),
             }
         )
-            .then((response) => {
+            .then(async (response) => {
                 if (response.status >= 400) {
-                    throw new Error(`${response.status} ${response.body}`);
+                    const errData = await response.json().catch(() => ({}));
+
+                    throw new Error(
+                        `${response.status} ${errData.message}\n${errData}`
+                    );
                 }
 
                 return response;
             })
-            .then((response) => response.status === 200 && response.json());
+            .then((response) => response.json().catch(() => ({})));
     }
 
     protected makeEndpointMethod<E extends keyof Endpoints>(endpoint: E) {

@@ -7,16 +7,9 @@ export default command(
     {
         name: "me",
         description: "Displays information about your GitHub profile",
+        requiresAuthentication: true,
     },
     async ({ ghClient }) => {
-        if (ghClient === undefined) {
-            console.error(
-                fmt`E:${"Octoshark is not connected to your GitHub account. Run 'oshark connect' to remedy this."}`
-            );
-
-            return;
-        }
-
         const user = await ghClient.user.authenticated.get();
 
         console.log(formatPOJO(user));

@@ -65,10 +65,12 @@ export class TaskIndicator<T> {
         data: D,
         options: TaskIndicatorOptions
     ) {
-        return TaskIndicator.promise<R>(async (done, interrupt) => {
-            apiMethod(data)
-                .then(done)
-                .catch((err) => interrupt(err.message));
-        }, options);
+        return TaskIndicator.promise<R>(
+            (done, interrupt) =>
+                apiMethod(data)
+                    .then(done)
+                    .catch((err) => interrupt(err.message)),
+            options
+        );
     }
 }

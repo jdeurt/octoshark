@@ -16,19 +16,11 @@ export default command<{
                 demandOption: true,
             },
         ],
+        requiresAuthentication: true,
     },
     async ({ argv, ghClient }) => {
-        if (ghClient === undefined) {
-            console.error(
-                fmt`E:${"Octoshark is not connected to your GitHub account. Run 'oshark connect' to remedy this."}`
-            );
-
-            return;
-        }
-
         if (!argv.username) {
-            console.warn(argv);
-            console.error(fmt`E:${"<username> argument is required."}`);
+            console.error(fmt`E:${"<username> argument is required"}`);
 
             process.exit(1);
         }
