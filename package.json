@@ -29,10 +29,10 @@
         "prepublishOnly": "npm run build",
         "types": "tsc --noEmit",
         "test": "jest",
-        "publish": "git push origin main --tags && npm publish",
-        "publish:patch": "npm version patch && npm run publish",
-        "publish:minor": "npm version minor && npm run publish",
-        "publish:major": "npm version major && npm run publish"
+        "publish:raw": "git push origin main --tags && npm publish",
+        "publish:patch": "npm version patch && npm run publish:raw",
+        "publish:minor": "npm version minor && npm run publish:raw",
+        "publish:major": "npm version major && npm run publish:raw"
     },
     "keywords": [
         "octoshark",
