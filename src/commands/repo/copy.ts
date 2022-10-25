@@ -230,7 +230,7 @@ export default command<{
 
                     done(
                         undefined,
-                        fmt`Copied repository successfully (k:${`${oldRepoOwner}/${oldRepoName}`} -> v:${`${newRepoOwner}/${newRepoName}`})`
+                        fmt`Copied repository successfully (${`${oldRepoOwner}/${oldRepoName}`} -> v:${`${newRepoOwner}/${newRepoName}`})`
                     );
                 } catch (err) {
                     interrupt((err as Error).message);
