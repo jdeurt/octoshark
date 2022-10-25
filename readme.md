@@ -54,8 +54,6 @@ oshark <command> --help
 
 Connects Octoshark to your GitHub account
 
-#### Usage
-
 ```bash
 oshark connect
 ```
@@ -63,8 +61,6 @@ oshark connect
 ### protocol
 
 Sets the connection protocol that should be used when interacting with repositories using `git`
-
-#### Usage
 
 ```bash
 oshark protocol "ssh"
@@ -74,8 +70,6 @@ oshark protocol "ssh"
 
 Displays general information about Octoshark
 
-#### Usage
-
 ```bash
 oshark status
 ```
@@ -83,8 +77,6 @@ oshark status
 ### repo comb
 
 Loops through your repositories and allows you to mark them for deletion/privatization
-
-#### Usage
 
 ```bash
 oshark repo comb
@@ -94,8 +86,6 @@ oshark repo comb
 
 Copies a repository
 
-#### Usage
-
 ```bash
 oshark repo cp "user/repo" "user/repo-copy"
 ```
@@ -103,8 +93,6 @@ oshark repo cp "user/repo" "user/repo-copy"
 ### repo create (c)
 
 Crates a new repository
-
-#### Usage
 
 ```bash
 oshark repo c --name "my-awesome-repo" --description "Hello World!"
@@ -114,8 +102,6 @@ oshark repo c --name "my-awesome-repo" --description "Hello World!"
 
 Deletes a repository
 
-#### Usage
-
 ```bash
 oshark repo rm "user/my-awesome-repo"
 ```
@@ -123,8 +109,6 @@ oshark repo rm "user/my-awesome-repo"
 ### secrets group create (c)
 
 Creates a new local secret group
-
-#### Usage
 
 ```bash
 oshark secrets group c "shh"
@@ -134,8 +118,6 @@ oshark secrets group c "shh"
 
 Deletes a local secret group
 
-#### Usage
-
 ```bash
 oshark secrets group rm "shh"
 ```
@@ -143,8 +125,6 @@ oshark secrets group rm "shh"
 ### secrets group get
 
 Retrieves a local secret group
-
-#### Usage
 
 ```bash
 oshark secrets group get "other-shh"
@@ -154,8 +134,6 @@ oshark secrets group get "other-shh"
 
 Pushes a local secret group to an existing repository as an environment
 
-#### Usage
-
 ```bash
 oshark secrets group p "other-shh" "user/repo" "MY_ENV"
 ```
@@ -163,8 +141,6 @@ oshark secrets group p "other-shh" "user/repo" "MY_ENV"
 ### util generate (g)
 
 Generates a file/directory from an existing template
-
-#### Usage
 
 ```bash
 oshark util g "gitignore"
