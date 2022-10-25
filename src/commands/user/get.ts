@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { command } from "../../structs/command.js";
 import { formatPOJO } from "../../helpers/theme/format-pojo.js";
 import { fmt } from "../../helpers/theme/fmt.js";
@@ -9,7 +8,6 @@ export default command<{
     {
         name: "get <username>",
         description: "Displays information about a GitHub user",
-        aliases: ["g"],
         args: [
             {
                 name: "username",

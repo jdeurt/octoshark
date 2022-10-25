@@ -1,6 +1,5 @@
 import sodium from "libsodium-wrappers";
 import { fmt } from "../../../helpers/theme/fmt.js";
-import { formatPOJOTable } from "../../../helpers/theme/format-pojo.js";
 import { styles } from "../../../helpers/theme/styles.js";
 import { command } from "../../../structs/command.js";
 import { TaskIndicator } from "../../../util/task-indicator.js";

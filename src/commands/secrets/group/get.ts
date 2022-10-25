@@ -9,7 +9,6 @@ export default command<{
     {
         name: "get <name>",
         description: "Retrieves a local secret group",
-        aliases: ["g"],
         args: [
             {
                 name: "name",
