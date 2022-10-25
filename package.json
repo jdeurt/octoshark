@@ -28,7 +28,11 @@
         "build": "tsc",
         "prepublishOnly": "npm run build",
         "types": "tsc --noEmit",
-        "test": "jest"
+        "test": "jest",
+        "publish": "git push origin main --tags && npm publish",
+        "publish:patch": "npm version patch && npm run publish",
+        "publish:minor": "npm version minor && npm run publish",
+        "publish:major": "npm version major && npm run publish"
     },
     "keywords": [
         "octoshark",

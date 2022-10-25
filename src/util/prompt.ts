@@ -19,17 +19,12 @@ function getArrayPromptAnswer(choices: any) {
         choices.find((choice: any) => choice.name === result).name as string;
 }
 
-export const autoComplete = (
-    message: string,
-    choices: string[],
-    limit?: number
-) =>
+export const autoComplete = (message: string, choices: Choice[]) =>
     prompt({
         type: "autocomplete",
         name: "0",
         message,
         choices,
-        maxChoices: limit,
     }).then(extractResultValue) as Promise<string>;
 
 export const confirm = (message: string, initial = false) =>

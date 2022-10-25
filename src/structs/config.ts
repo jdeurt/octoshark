@@ -1,4 +1,3 @@
-import { homedir } from "node:os";
 import {
     parse as parsePath,
     resolve as resolvePath,
@@ -6,6 +5,7 @@ import {
 } from "node:path";
 import { readFileSync, mkdirSync, existsSync, writeFileSync } from "node:fs";
 import { encode, decode } from "ini";
+import constants from "../config/constants.js";
 
 export class Config<T extends Record<string, any>> {
     private static _instance?: Config<any>;
@@ -16,7 +16,7 @@ export class Config<T extends Record<string, any>> {
     document: T;
 
     private constructor() {
-        this.strConfigPath = resolvePath(homedir(), ".octoshark", "config.ini");
+        this.strConfigPath = resolvePath(constants.CONFIG_PATH, "config.ini");
         this.parsedConfigPath = parsePath(this.strConfigPath);
 
         // create config folders and file if they do not exist

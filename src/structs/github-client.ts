@@ -20,12 +20,17 @@ export class GitHubClient {
             page?: number;
         },
         R extends unknown[]
-    >(apiMethod: (data?: D) => Promise<R>, data: D, perPage = 30): Promise<R> {
+    >(
+        apiMethod: (data?: D) => Promise<R>,
+        data: D,
+        perPage = 30,
+        limit = Infinity
+    ): Promise<R> {
         const result: R = [] as any;
 
         let currentPage = 1;
 
-        while (true) {
+        while (currentPage <= limit) {
             const response = await apiMethod({
                 ...data,
                 per_page: perPage,
@@ -147,7 +152,7 @@ export class GitHubClient {
                 list: this.makeEndpointMethod("GET /gitignore/templates"),
                 get: this.makeEndpointMethod("GET /gitignore/templates/{name}"),
             },
-            licenses: {
+            license: {
                 list: this.makeEndpointMethod("GET /licenses"),
                 get: this.makeEndpointMethod("GET /licenses/{license}"),
             },

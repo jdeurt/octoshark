@@ -10,6 +10,7 @@ export default command<{
     {
         name: "delete <repo>",
         description: "Deletes a repository",
+        aliases: ["rm"],
         args: [
             {
                 name: "repo",

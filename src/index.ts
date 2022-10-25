@@ -45,7 +45,7 @@ function initCommandLike(commandLike: CommandLike) {
     commandLike.aliases?.forEach((alias) =>
         initCommandLike({
             ...commandLike,
-            name: alias,
+            name: `${alias} ${commandLike.name.split(" ").slice(1).join(" ")}`,
             aliases: undefined,
             description: `Alias for '${commandLike.name}'`,
         })

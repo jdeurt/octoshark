@@ -10,6 +10,7 @@ export default command<{
     {
         name: "delete <name>",
         description: "Deletes a local secret group",
+        aliases: ["rm"],
         args: [
             {
                 name: "name",

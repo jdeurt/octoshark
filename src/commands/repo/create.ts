@@ -229,11 +229,11 @@ export default command<{
             await TaskIndicator.promise(
                 async (done, interrupt) => {
                     execaCommand(
-                        repoUrl(
+                        `git clone ${repoUrl(
                             createdRepo.owner.login,
                             createdRepo.name,
                             config.document.protocol
-                        )
+                        )}`
                     )
                         .then(() => done(undefined))
                         .catch((err) => interrupt(err.message));
@@ -247,7 +247,11 @@ export default command<{
             );
         } else {
             console.log(
-                `Clone this repository by running:\n\n\tgit clone git@github.com:${createdRepo.owner.login}/${createdRepo.name}.git\n`
+                `Clone this repository by running:\n\n\tgit clone ${repoUrl(
+                    createdRepo.owner.login,
+                    createdRepo.name,
+                    config.document.protocol
+                )}\n`
             );
         }
     }
